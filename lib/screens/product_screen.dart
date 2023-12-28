@@ -57,7 +57,7 @@ class _ProductScreenBody extends StatelessWidget {
                           //Todo Camara o galeria
                           final picker = ImagePicker();
                           final XFile? pickedFile = await picker.pickImage(
-                              source: ImageSource.gallery);
+                              source: ImageSource.camera);
                           if (pickedFile == null) {
                             print('No selecciono nada');
                             return;
