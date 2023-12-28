@@ -114,7 +114,7 @@ class ProductsService extends ChangeNotifier {
     final streamResponse = await imageUploadRequest.send();
     final resp = await http.Response.fromStream(streamResponse);
     final decodedData = json.decode(resp.body);
-
+    newPictureFile = null;
     return decodedData['secure_url'];
 
     // final urlCloudinary = respCloudinary.secure_url;
