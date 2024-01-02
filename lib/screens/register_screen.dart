@@ -5,8 +5,8 @@ import 'package:flutter_products_app/ui/input_decorations.dart';
 import 'package:flutter_products_app/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,8 @@ class LoginScreen extends StatelessWidget {
               child: Column(
             children: [
               const SizedBox(height: 10),
-              Text('Login', style: Theme.of(context).textTheme.headlineSmall),
+              Text('Crear cuenta',
+                  style: Theme.of(context).textTheme.headlineSmall),
               const SizedBox(height: 30),
               ChangeNotifierProvider(
                   create: (_) => LoginFormProvider(), child: _LoginForm()),
@@ -31,13 +32,10 @@ class LoginScreen extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, 'register');
+              Navigator.pushReplacementNamed(context, 'login');
             },
-            child: const Text('Crear una nueva cuenta'),
+            child: const Text('Ya tienes una cuenta?'),
           ),
-          const SizedBox(
-            height: 30,
-          )
         ],
       ),
     )));
@@ -50,7 +48,8 @@ class _LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loginForm = Provider.of<LoginFormProvider>(context);
-    final loginUser = Provider.of<AuthService>(context);
+    final createUser = Provider.of<AuthService>(context);
+
     return Container(
       child: Form(
           key: loginForm.formKey,
@@ -110,13 +109,13 @@ class _LoginForm extends StatelessWidget {
                         FocusScope.of(context).unfocus();
                         if (!loginForm.isValidForm()) return;
                         loginForm.isLoading = true;
-                        final String? errorMessage = await loginUser.login(
-                            loginForm.email, loginForm.password);
+                        final String? errorMessage = await createUser
+                            .createUser(loginForm.email, loginForm.password);
                         if (errorMessage == null) {
                           Navigator.pushReplacementNamed(context, 'home');
                         } else {
-                          NotificationsService.showSnackBar(errorMessage);
-                          loginForm.isLoading = false;
+                          print(errorMessage);
+                        loginForm.isLoading = false;
                         }
                       },
                 child: Container(
@@ -127,7 +126,7 @@ class _LoginForm extends StatelessWidget {
                       : const Text('Ingresar',
                           style: TextStyle(color: Colors.white)),
                 ),
-              ),
+              )
             ],
           )),
     );

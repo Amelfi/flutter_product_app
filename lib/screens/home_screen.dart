@@ -11,12 +11,24 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productsService = Provider.of<ProductsService>(context);
+    final authService = Provider.of<AuthService>(context, listen: false);
 
     if (productsService.isLoading) return const LoadingScreen();
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Productos'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                authService.logout();
+                Navigator.pushReplacementNamed(context, 'login');
+              },
+              icon: const Icon(
+                Icons.logout_outlined,
+                color: Colors.white,
+              ))
+        ],
       ),
       body: ListView.builder(
         itemCount: productsService.products.length,
@@ -33,10 +45,10 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          productsService.selectedProduct = Product(available: false, name: '', price: 0.0);
-          Navigator.pushNamed(
-            context, 'product',
-            arguments: productsService.selectedProduct);
+          productsService.selectedProduct =
+              Product(available: false, name: '', price: 0.0);
+          Navigator.pushNamed(context, 'product',
+              arguments: productsService.selectedProduct);
         },
         child: const Icon(
           Icons.add,
